@@ -8,9 +8,7 @@ body {
   background: #343a40;
 }
 
-
-footer{
-  position: absolute;
-  right:0px;
-  left:0px;
+footer {
+  right: 0px;
+  left: 0px;
 }
