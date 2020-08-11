@@ -28,7 +28,7 @@ const Cart = () => {
                 key={index}
                 product={product}
                 removeFromCart={true}
-                addToCartFlg={false}
+                addToCartFlg={true}
                 photo={false}
                 quantity={true}
                 setReload={setReload}
@@ -45,8 +45,10 @@ const Cart = () => {
     <Base title="Cart Page" description="Ready to Checkout">
       <div className="row">
         <div className="col-6">{loadCartProducts(products)}</div>
-        <div className="col-6">
-          <StripeCheckOut products={products} setReload={setReload} />
+        <div className="col-6 text-center">
+          {/* <StripeCheckOut products={products} setReload={setReload} /> */}
+          <br />
+          <br />
           <BraintreeCheckOut products={products} setReload={setReload} />
         </div>
       </div>

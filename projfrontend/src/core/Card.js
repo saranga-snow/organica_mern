@@ -1,27 +1,57 @@
 import React, { useState, useEffect } from "react"
 import ImageHelper from "./helper/imageHelper"
 import { addItemToCart, removeItemFromCart } from "./helper/cartHelper"
-import { Redirect } from "react-router-dom"
 
 const Card = ({
   product,
   addToCartFlg = true,
-  removeFromCart = false,
+  removeFromCart = true,
   photo = true,
-  quantity = false,
+  quantity = true,
   setReload = (arg) => arg, // function(f){return f}
   reload = undefined
 }) => {
-  const [redirect, setRedirect] = useState(false)
+  const [cartProdValues, setCartProdValues] = useState({
+    cartProdQuant: 0
+  })
+
+  const { cartProdQuant } = cartProdValues
+
+  const getCartProdQuant = (prodId) => {
+    let quant = 0
+    let cart = []
+    if (typeof window !== undefined) {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"))
+      }
+      let flg = 1
+      cart.map((cartItem, index) => {
+        if (cartItem._id === prodId) {
+          quant = cartItem.quantity
+          setCartProdValues({ ...cartProdValues, cartProdQuant: quant })
+          flg = 0
+        }
+      })
+      if (flg) {
+        setCartProdValues({ ...cartProdValues, cartProdQuant: quant })
+      }
+    }
+  }
+
+  useEffect(() => {
+    getCartProdQuant(product._id)
+  }, [reload])
 
   const cartTitle = product ? product.name : "PRODUCT NAME"
   const cartDescription = product ? product.description : "DESCRIPTION"
   const cartPrice = product ? product.price : "PRICE"
 
   const addToCart = () => {
-    addItemToCart(product, () => setRedirect(true))
+    addItemToCart(product, () => {})
+    getCartProdQuant(product._id)
   }
 
+  // const [redirect, setRedirect] = useState(false)
   //   const getRedirect = (redirect) => {
   //     if (redirect) {
   //       return <Redirect to="/cart" />
@@ -47,6 +77,7 @@ const Card = ({
         <button
           onClick={() => {
             removeItemFromCart(product._id)
+            getCartProdQuant(product._id)
             setReload(!reload)
           }}
           className="btn btn-block btn-outline-danger mt-2 mb-2"
@@ -56,7 +87,7 @@ const Card = ({
       )
     )
   }
-
+  console.log("CART QUANTITY: ", cartProdQuant)
   return (
     <div className="card text-white bg-dark border border-info ">
       <div className="card-header lead text-center">{cartTitle}</div>
@@ -73,16 +104,14 @@ const Card = ({
               <span className="text-white text-center">{cartPrice}</span>
             </div>
             <div className="col-4 text-center">
-              {quantity && (
-                <span className="text-white text-center">
-                  {product.quantity}
-                </span>
+              {quantity && cartProdQuant > 0 && (
+                <span className="text-white text-center">{cartProdQuant}</span>
               )}
             </div>
             <div className="col-4 text-center">
-              {quantity && (
+              {quantity && cartProdQuant > 0 && (
                 <span className="text-white text-center">
-                  {product.quantity * cartPrice}
+                  {cartProdQuant * cartPrice}
                 </span>
               )}
             </div>
@@ -91,7 +120,9 @@ const Card = ({
 
         <div className="row">
           <div className="col-12">{showAddToCart(addToCartFlg)}</div>
-          <div className="col-12">{showRemoveFromCart(removeFromCart)}</div>
+          {cartProdQuant > 0 && (
+            <div className="col-12">{showRemoveFromCart(removeFromCart)}</div>
+          )}
         </div>
       </div>
     </div>

@@ -8,7 +8,8 @@ const {
   updateProduct,
   removeProduct,
   getAllProducts,
-  getAllUniqueCategories
+  getAllUniqueCategories,
+  getProductsByCategory
 } = require("../controllers/product")
 const { isSignedIn, isAdmin, isAuthenticated } = require("../controllers/auth")
 const { getUserById } = require("../controllers/user")
@@ -16,6 +17,7 @@ const { getUserById } = require("../controllers/user")
 //PARAMS
 router.param("userId", getUserById)
 router.param("productId", getProductById)
+router.param("categoryId", getProductsByCategory)
 
 // PRODUCTS BY CATEGORY
 // router.param("categoryId", getProductsByCategoryId)
@@ -48,10 +50,13 @@ router.delete(
 router.get("/products", getAllProducts)
 router.get("/products/categories", getAllUniqueCategories)
 
-// PRODUCTS BY CATEGORY
-// router.get("/products/:categoryId", getProductsByCategory)
-
 ////IMAGE PERFORMANCE OPTIMIZATION
 router.get("/product/photo/:productId", photo)
+
+// PRODUCTS BY CATEGORY
+router.get("/products/:categoryId", (req, res) => {
+  let products = req.body
+  res.json(products)
+})
 
 module.exports = router

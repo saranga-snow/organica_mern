@@ -92,7 +92,7 @@ const Signup = () => {
               SignUp
             </button>
           </form>
-          <p className="text-white">{JSON.stringify(values)}</p>
+          {/* <p className="text-white">{JSON.stringify(values)}</p> */}
         </div>
       </div>
     )

@@ -2,6 +2,7 @@ const Product = require("../models/product")
 const formidable = require("formidable")
 const _ = require("lodash")
 const fs = require("fs")
+const { isValidObjectId } = require("mongoose")
 
 exports.getProductById = (req, res, next, id) => {
   Product.findById(id)
@@ -13,6 +14,17 @@ exports.getProductById = (req, res, next, id) => {
         })
       }
       req.product = product
+      next()
+    })
+}
+
+exports.getProductsByCategory = (req, res, next, id) => {
+  console.log("getProductsByCategory")
+  Product.find({ category: id })
+    .select("-photo")
+    .populate("category")
+    .exec((err, products) => {
+      req.body = products
       next()
     })
 }
@@ -89,7 +101,6 @@ exports.removeProduct = (req, res) => {
 }
 
 exports.updateProduct = (req, res) => {
-  console.log("UPDATE REQ!!!")
   let form = new formidable.IncomingForm()
   form.keepExtensions = true
 
@@ -100,10 +111,12 @@ exports.updateProduct = (req, res) => {
       })
     }
 
-    //updatation of product
+    //updation of product
     let product = req.product
+    console.log("PRODUCT_INIT: ", product)
+    console.log("FIELDS: ", fields)
     product = _.extend(product, fields)
-
+    console.log("PRODUCT: ", product)
     ///handle file here
     if (file.photo) {
       if (file.photo.size > 3000000) {
@@ -157,11 +170,12 @@ exports.getAllUniqueCategories = (req, res) => {
 }
 
 exports.updateStock = (req, res, next) => {
+  console.log(req.body.order.products)
   let myOperations = req.body.order.products.map((item) => {
     return {
       updateOne: {
         filter: { _id: item._id },
-        update: { $inc: { stock: -item.count, sold: +item.count } }
+        update: { $inc: { stock: -item.quantity, sold: +item.quantity } }
       }
     }
   })
@@ -174,8 +188,4 @@ exports.updateStock = (req, res, next) => {
     }
     next()
   })
-}
-
-exports.getProductsByCategoryId = (req, res, next, id) => {
-  //
 }

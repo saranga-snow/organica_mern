@@ -20,6 +20,7 @@ const StripeCheckOut = ({
 
   const authToken = isAuthenticated() && isAuthenticated().authToken
   const userId = isAuthenticated() && isAuthenticated().user._id
+  const user = isAuthenticated()
 
   const getFinalPrice = () => {
     let amount = 0
@@ -46,8 +47,26 @@ const StripeCheckOut = ({
       body: JSON.stringify(body)
     })
       .then((response) => {
-        const { status } = response
-        console.log("STATUS ", status)
+        // const { status } = response
+        // console.log("STATUS ", status)
+        const transactionDetails = response
+        console.log(transactionDetails)
+        // console.log("transaction details: ", transactionDetails.id)
+        // console.log("amount details: ", transactionDetails.amount)
+
+        /////CREATING THE ORDER
+        // const orderData = {
+        //   user: user,
+        //   products: products,
+        //   transaction_id: response.transaction.id,
+        //   amount: response.transaction.amount
+        // }
+        // createOrder(userId, token, orderData)
+        //   .then((data) => {
+        //     console.log(data)
+        //   })
+        //   .catch((err) => console.log(err))
+
         emptyCart()
         setReload(!reload)
       })

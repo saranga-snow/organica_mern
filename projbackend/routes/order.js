@@ -17,15 +17,16 @@ router.param("userId", getUserById)
 router.param("orderId", getOrderById)
 
 //ROUTES
-// router.post(
-//   "/order/create/:userId",
-//   isSignedIn,
-//   isAuthenticated,
-//   pushOrderInPurchaseList,
-//   updateStock,
-//   createOrder
-// )
-router.post("/order/create/:userId", isSignedIn, isAuthenticated, createOrder)
+router.post(
+  "/order/create/:userId",
+  isSignedIn,
+  isAuthenticated,
+  pushOrderInPurchaseList,
+  updateStock,
+  createOrder
+)
+
+// router.post("/order/create/:userId", isSignedIn, isAuthenticated, createOrder)
 
 router.get(
   "/order/all/:userId",

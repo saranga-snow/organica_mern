@@ -25,9 +25,9 @@ const BraintreeCheckOut = ({
   const token = isAuthenticated() && isAuthenticated().authToken
 
   const getClientToken = (userId, token) => {
-    console.log("getClientToken")
+    // console.log("getClientToken")
     getToken(userId, token).then((info) => {
-      console.log("INFORMATION :", info)
+      // console.log("INFORMATION :", info)
       if (info.error) {
         setInfo({ ...info, error: info.error })
       } else {
@@ -40,7 +40,7 @@ const BraintreeCheckOut = ({
   const showBTDropIn = () => {
     return (
       <div>
-        {info.clientToken !== null && products.length > 0 ? (
+        {token && info.clientToken !== null && products.length > 0 ? (
           <div>
             <DropIn
               options={{ authorization: info.clientToken }}

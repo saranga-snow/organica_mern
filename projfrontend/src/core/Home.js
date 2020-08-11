@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
 import Base from "./Base"
 import Card from "./Card"
-import { getProducts } from "./helper/coreapicalls"
+import { getProducts, getProductsByCategory } from "./helper/coreapicalls"
 import { getAllCategories } from "../admin/helper/adminapicall"
 import { Link } from "react-router-dom"
 
-const Home = ({ match }) => {
+const Home = () => {
   const [categories, setCategories] = useState([])
 
   const loadAllCategories = () => {
@@ -27,13 +27,14 @@ const Home = ({ match }) => {
 
   const loadProducts = (categoryId) => {
     if (categoryId) {
-      //   getProductsByCategory(categoryId).then((data) => {
-      //     if (data.error) {
-      //       setError(data.error)
-      //     } else {
-      //       setProducts(data)
-      //     }
-      //   })
+      getProductsByCategory(categoryId).then((data) => {
+        console.log(data)
+        if (data.error) {
+          setError(data.error)
+        } else {
+          setProducts(data)
+        }
+      })
     } else {
       getProducts()
         .then((data) => {
@@ -48,7 +49,7 @@ const Home = ({ match }) => {
   }
 
   useEffect(() => {
-    loadProducts(match.params.categoryId)
+    loadProducts()
   }, [])
 
   const leftSideHome = () => {
@@ -57,19 +58,26 @@ const Home = ({ match }) => {
         <h4 className="card-header bg-dark text-white">Categories</h4>
         <ul className="list-group">
           <li className="list-group-item">
-            <Link to="/" className="nav-link text-success hover">
+            <span
+              onClick={() => {
+                loadProducts()
+              }}
+              className="nav-link text-success hover"
+            >
               All Categories
-            </Link>
+            </span>
           </li>
           {categories.map((category, index) => {
             return (
               <li key={index} className="list-group-item">
-                <Link
-                  to={`/category/${category._id}`}
+                <span
+                  onClick={() => {
+                    loadProducts(category._id)
+                  }}
                   className="nav-link text-success"
                 >
                   {category.name}
-                </Link>
+                </span>
               </li>
             )
           })}
@@ -81,15 +89,26 @@ const Home = ({ match }) => {
   const rightSideHome = () => {
     return (
       <div className="row text-center">
-        <h1 className="text-white text-center">Products</h1>
+        <div className="row text-center">
+          <h1 className="text-white text-center">Products</h1>
+        </div>
         <div className="row">
-          {products.map((product, index) => {
-            return (
-              <div className="col-4 mb-4" key={index}>
-                <Card product={product} />
-              </div>
-            )
-          })}
+          {products.length > 0 ? (
+            products.map((product, index) => {
+              return (
+                <div className="col-4 mb-4" key={index}>
+                  <Card product={product} />
+                </div>
+              )
+            })
+          ) : (
+            <div>
+              <br />
+              <h2 className="text-white">
+                No Products Found in this category
+              </h2>{" "}
+            </div>
+          )}
         </div>
       </div>
     )
