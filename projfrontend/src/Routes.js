@@ -13,6 +13,9 @@ import AddProduct from "./admin/AddProduct"
 import ManageProducts from "./admin/ManageProducts"
 import UpdateProduct from "./admin/UpdateProduct"
 import UpdateCategory from "./admin/UpdateCategory"
+import ManageUser from "./user/ManageUser"
+import GetUserOrders from "./user/GetUserOrders"
+
 import Cart from "./core/Cart"
 
 const Routes = () => {
@@ -25,12 +28,22 @@ const Routes = () => {
           <Route path="/signin" component={Signin} />
           <Route path="/cart" component={Cart} />
 
-          {/* <Route path="/category/:categoryId" component={Home} /> */}
-          {/* <Route path="/products/:categoryId" component={Home} /> */}
           <PrivateRoute
             path="/user/dashboard"
             exact
             component={UserDashBoard}
+          />
+
+          <PrivateRoute
+            path="/user/infoupdate/:userId"
+            exact
+            component={ManageUser}
+          />
+
+          <PrivateRoute
+            path="/user/orders/:userId"
+            exact
+            component={GetUserOrders}
           />
           <AdminRoute
             path="/admin/dashboard"

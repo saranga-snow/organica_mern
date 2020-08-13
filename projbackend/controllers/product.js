@@ -113,10 +113,10 @@ exports.updateProduct = (req, res) => {
 
     //updation of product
     let product = req.product
-    console.log("PRODUCT_INIT: ", product)
-    console.log("FIELDS: ", fields)
+    // console.log("PRODUCT_INIT: ", product)
+    // console.log("FIELDS: ", fields)
     product = _.extend(product, fields)
-    console.log("PRODUCT: ", product)
+    // console.log("PRODUCT: ", product)
     ///handle file here
     if (file.photo) {
       if (file.photo.size > 3000000) {

@@ -90,6 +90,13 @@ const Menu = ({ history }) => {
             </span>
           </li>
         )}
+        {isAuthenticated() && (
+          <li className="nav-item">
+            <span className="nav-link text-success">
+              <h4>Hi {isAuthenticated().user.name} !!</h4>
+            </span>
+          </li>
+        )}
       </ul>
     </div>
   )
