@@ -103,6 +103,7 @@ const BraintreeCheckOut = ({
     products.map((item, index) => {
       amount = amount + item.price * item.quantity
     })
+
     return amount
   }
   let amount = 0

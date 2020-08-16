@@ -18,6 +18,7 @@ exports.getOrderById = (req, res, next, id) => {
 exports.createOrder = (req, res) => {
   console.log("CREATE ORDER REQ!!!")
   req.body.order.user = req.profile
+  console.log(req.body.order)
   const orders = new Order(req.body.order)
   orders.save((err, order) => {
     if (err) {
@@ -59,4 +60,19 @@ exports.updateStatus = (req, res) => {
       res.json(order)
     }
   )
+}
+
+exports.getUserOrders = (req, res) => {
+  console.log("getUserOrders")
+  console.log(req.profile._id)
+  Order.find({ user: req.profile._id }).exec((err, orders) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Cannot find orders"
+      })
+    } else {
+      console.log(orders)
+      res.json(orders)
+    }
+  })
 }

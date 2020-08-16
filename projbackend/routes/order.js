@@ -9,7 +9,8 @@ const {
   createOrder,
   getAllOrders,
   getOrderStatus,
-  updateStatus
+  updateStatus,
+  getUserOrders
 } = require("../controllers/order")
 
 //PARAMS
@@ -17,6 +18,10 @@ router.param("userId", getUserById)
 router.param("orderId", getOrderById)
 
 //ROUTES
+
+// User router to get all orders
+router.get("/orders/:userId", getUserOrders)
+
 router.post(
   "/order/create/:userId",
   isSignedIn,

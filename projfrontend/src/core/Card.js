@@ -47,16 +47,10 @@ const Card = ({
   const cartPrice = product ? product.price : "PRICE"
 
   const addToCart = () => {
-    addItemToCart(product, () => {})
+    addItemToCart(product)
     getCartProdQuant(product._id)
+    setReload(!reload)
   }
-
-  // const [redirect, setRedirect] = useState(false)
-  //   const getRedirect = (redirect) => {
-  //     if (redirect) {
-  //       return <Redirect to="/cart" />
-  //     }
-  //   }
 
   const showAddToCart = (addToCartFlg) => {
     return (

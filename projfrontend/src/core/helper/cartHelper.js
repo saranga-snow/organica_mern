@@ -1,4 +1,4 @@
-export const addItemToCart = (item, next) => {
+export const addItemToCart = (item) => {
   item.quantity = 1
   let cart = []
   if (typeof window !== undefined) {
@@ -17,7 +17,7 @@ export const addItemToCart = (item, next) => {
     }
   }
   localStorage.setItem("cart", JSON.stringify(cart))
-  next()
+  return cart
 }
 
 export const loadCart = () => {

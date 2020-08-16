@@ -42,8 +42,7 @@ var userSchema = new mongoose.Schema(
       default: 0
     },
     purchases: {
-      type: [ObjectId],
-      ref: "Order",
+      type: [],
       default: []
     }
   },

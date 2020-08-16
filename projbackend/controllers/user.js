@@ -2,23 +2,19 @@ const User = require("../models/user")
 const Order = require("../models/order")
 
 exports.getUserById = (req, res, next, id) => {
-  console.log("GET USER BY ID")
   User.findById(id).exec((err, user) => {
     if (err || !user) {
-      console.log(err)
       return res.status(400).json({
         error: "No user found!!!!"
       })
     }
     req.profile = user
-    console.log(req.profile)
     next()
   })
 }
 
 exports.getUser = (req, res) => {
   //TODO: get back here for password
-  console.log("GET USER")
 
   req.profile.salt = undefined
   req.profile.encry_password = undefined
@@ -67,19 +63,20 @@ exports.userPurchaseList = (req, res) => {
 
 exports.pushOrderInPurchaseList = (req, res, next) => {
   let purchases = []
-  // req.body.order.products.forEach((item) => {
-  //   purchases.push({
-  //     _id: item._id,
-  //     name: item.name,
-  //     description: item.description,
-  //     category: item.category,
-  //     quantity: item.quantity,
-  //     amount: req.body.order.amount,
-  //     transaction_id: req.body.order.transaction_id
-  //   })
-  // })
-  let order = req.body.order._id
-  purchases.push(order)
+  console.log("product list: ", req.body.order.products)
+  req.body.order.products.forEach((item) => {
+    purchases.push({
+      _id: item._id,
+      name: item.name,
+      description: item.description,
+      category: item.category,
+      quantity: item.quantity,
+      price: item.price,
+      transaction_id: req.body.order.transaction_id
+    })
+  })
+  // let order = req.body.order
+  // purchases.push(order)
 
   ////store in DB
   User.findOneAndUpdate(
